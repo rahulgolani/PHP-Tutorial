@@ -30,6 +30,7 @@ echo "<br>";
 //Array->
 
 $friends=array("Rahul","Golani");
+// this type of array is called numeric array or indexed arrayy since it has keys as 0,1 etc
 // echo $friends;//error since we are trying to convert array to string 
 
 echo var_dump($friends);
