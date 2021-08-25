@@ -29,16 +29,16 @@ else{
 }
 
 //Dropping a database
-$sql="DROP DATABASE PHP_TUTORIAL";
+// $sql="DROP DATABASE PHP_TUTORIAL";
 
 // executing the query(param1-connection object, param2-sql query)
-$result=mysqli_query($connection,$sql);
+// $result=mysqli_query($connection,$sql);
 
-if ($result){
-    echo "Database was dropped Successfully!<br>";
-}
-else{
-    echo "Database was not dropped due to error ---> ".mysqli_error($connection)."<br>"; 
-}
+// if ($result){
+//     echo "Database was dropped Successfully!<br>";
+// }
+// else{
+//     echo "Database was not dropped due to error ---> ".mysqli_error($connection)."<br>"; 
+// }
 
 ?>
