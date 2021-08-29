@@ -66,6 +66,30 @@ if (!$connection) {
         </div>
     </div>
 
+    <!-- MODAL FOR DELETING NOTES -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Note</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+                        <input type="hidden" name="snoDelete" id="snoDelete">
+                        Are You Sure You Want To Delete This Note?
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                            <button type="submit" class="btn btn-primary">Yes, Delete Note</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
@@ -122,11 +146,34 @@ if (!$connection) {
 
 
 
-    <!-- INSERTING DATA IN DATABASE ON POST -->
+    <!-- INSERTING OR UPDATING DATA IN DATABASE ON POST -->
     <?php
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if (isset($_POST['snoDelete'])) {
+            $sno = $_POST['snoDelete'];
+            $sql="DELETE FROM notes WHERE sno = '$sno'";
+            $result = mysqli_query($connection, $sql);
 
-        if (isset($_POST['snoEdit'])) {
+            if ($result) {
+                // SUCCESS MESSAGE
+                echo "<div class='alert alert-success alert-dismissible d-flex align-items-center' role='alert'>
+                 <svg class='bi flex-shrink-0 me-2' width='24' height='24' role='img' aria-label='Success:'><use xlink:href='#check-circle-fill'/></svg>
+                 <div>
+                   Note Deleted Successfully!
+                 </div>
+                 <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+               </div>";
+            } else {
+                // FAILURE MESSAGE
+                echo "<div class='alert alert-danger d-flex align-items-center' role='alert'>
+            <svg class='bi flex-shrink-0 me-2' width='24' height='24' role='img' aria-label='Danger:'><use xlink:href='#exclamation-triangle-fill'/></svg>
+            <div>
+              Unable to delete the note. Please try after some time!" . mysqli_error($connection) . "
+            </div>
+            <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+          </div>";
+            }
+        } else if (isset($_POST['snoEdit'])) {
             // UPDATE RECORD
             $title = $_POST['titleEdit'];
             $description = $_POST['descriptionEdit'];
@@ -148,7 +195,7 @@ if (!$connection) {
                 echo "<div class='alert alert-danger d-flex align-items-center' role='alert'>
             <svg class='bi flex-shrink-0 me-2' width='24' height='24' role='img' aria-label='Danger:'><use xlink:href='#exclamation-triangle-fill'/></svg>
             <div>
-              Unable to connect to database. Please try after some time!".mysqli_error($connection)."
+              Unable to connect to database. Please try after some time!" . mysqli_error($connection) . "
             </div>
             <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
           </div>";
@@ -192,12 +239,12 @@ if (!$connection) {
         <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
             <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
-                <input type="text" class="form-control" id="title" name="title" placeholder="Enter Title" aria-describedby="emailHelp">
+                <input type="text" class="form-control" id="title" name="title" placeholder="Enter Title" required aria-describedby="emailHelp">
                 <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
             </div>
             <div class="mb-3">
                 <label for="description">Description</label>
-                <textarea class="form-control" name="description" placeholder="Enter Description" id="description"></textarea>
+                <textarea class="form-control" name="description" placeholder="Enter Description" required id="description"></textarea>
             </div>
             <!-- <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" id="exampleCheck1">
@@ -233,12 +280,13 @@ if (!$connection) {
                         <th scope='row'>" . $sno . "</th>
                         <td>" . $row['title'] . "</td>
                         <td>" . $row['description'] . "</td>
-                        <td><!-- Button trigger modal -->
+                        <td><!-- Edit Button trigger modal -->
                         <button type='button' class='btn btn-primary edit' data-bs-toggle='modal' data-bs-target='#exampleModal' id=" . $row['sno'] . ">
                                 Edit
                             </button>
-                            <button type='button' class='btn btn-primary' >
-                                Delete
+                            <!-- Delete Button trigger modal -->
+                        <button type='button' class='btn btn-primary delete' data-bs-toggle='modal' data-bs-target='#deleteModal' id=" . $row['sno'] . ">
+                                Delete Note
                             </button></td>
                             </td>
                     </tr>";
@@ -283,18 +331,30 @@ if (!$connection) {
                 targetRow = e.target.parentNode.parentNode;
                 var title = targetRow.getElementsByTagName('td')[0].innerText;
                 var description = targetRow.getElementsByTagName('td')[1].innerText;
-                console.log(title);
-                console.log(description);
+                // console.log(title);
+                // console.log(description);
 
                 document.getElementById("titleEdit").value = title;
                 document.getElementById("descriptionEdit").value = description;
 
                 var sno = e.target.id;
-                console.log(sno);
+                // console.log(sno);
 
                 document.getElementById("snoEdit").value = sno;
 
             })
+        });
+
+        var deletes = document.getElementsByClassName('delete');
+        // console.log(deletes);
+        Array.from(deletes).forEach(element => {
+            element.addEventListener('click', (e) => {
+                // targetRow=e.target.parentNode.parentNode;
+                var sno = e.target.id;
+                // console.log(sno);
+
+                document.getElementById('snoDelete').value = sno;
+            });
         });
     </script>
 
