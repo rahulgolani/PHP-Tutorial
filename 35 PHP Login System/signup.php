@@ -1,3 +1,27 @@
+<?php
+$showSuccessAlert = false;
+$showErrorAlert = false;
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    include "./partials/_dbconnect.php";
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $cpassword = $_POST['cpassword'];
+
+    if ($password == $cpassword) {
+        $sql = "INSERT INTO `users` (`username`, `password`, `created`) VALUES ('$username', '$password', current_timestamp())";
+        $result = mysqli_query($connection, $sql);
+        if ($result) {
+            $showSuccessAlert = true;
+        }
+    } else {
+        $showErrorAlert = true;
+    }
+}
+
+
+
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -14,6 +38,46 @@
 
 <body>
     <?php require "./partials/_nav.php" ?>
+    <?php
+    if($showSuccessAlert){
+        echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+        <strong>Success!</strong> Your account has been created, now you can login!
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>";
+    }
+
+    if($showErrorAlert){
+        echo "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Error!</strong> Password and Confirm Password are not same. Please Try Again!
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>";
+    }
+    ?>
+    
+
+    <div class="container my-5">
+        <h1>SignUp!</h1>
+    </div>
+    <div class="container my-5">
+        <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+            </div>
+            <div class="mb-3">
+                <label for="cpassword" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="cpassword" name="cpassword" aria-describedby="cpasswordhelp" placeholder="Confirm Password">
+                <div id="cpasswordhelp" class="form-text">Make sure both parrwords match.</div>
+            </div>
+            <button type="submit" class="btn btn-primary">SignUp</button>
+        </form>
+    </div>
+
 
     <!-- Optional JavaScript; choose one of the two! -->
 
