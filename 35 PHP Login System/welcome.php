@@ -3,7 +3,7 @@
 <?php
 
 session_start();
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin']!=true ){
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
     // not logged in; redirect to login page;
     header("location: login.php");
     exit; //exit the php script
@@ -28,7 +28,15 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin']!=true ){
 <body>
     <?php require "./partials/_nav.php" ?>
 
-    <h1>WELCOME! - <?php echo $_SESSION['username'];?></h1>
+    <!-- LOGIN MESSAGE AND LINK TO LOGOUT -->
+    <div class="container my-5">
+        <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">WELCOME! - <?php echo $_SESSION['username']; ?></h4>
+            <p>You are logged in as <?php echo $_SESSION['username']; ?></p>
+            <hr>
+            <p class="mb-0">Please <a href="./logout.php">use this link</a> to logout</p>
+        </div>
+    </div>
 
     <!-- Optional JavaScript; choose one of the two! -->
 

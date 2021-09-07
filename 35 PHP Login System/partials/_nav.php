@@ -1,3 +1,14 @@
+<?php
+
+if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']==true){
+  $loggedin=true;
+}
+else{
+  $loggedin=false;
+}
+
+?>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     <a class="navbar-brand" href="./login.php">Login System</a>
@@ -9,15 +20,31 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="./welcome.php">Home</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="./login.php">Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="./signup.php">SignUp</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="./logout.php">Logout</a>
-        </li>
+
+        <!-- IF USER IS NOT LOGGED IN SHOW LOGIN AND SIGNUP BUTTON -->
+        <?php
+        if ($loggedin==false){
+            echo '<li class="nav-item">
+            <a class="nav-link" href="./login.php">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./signup.php">SignUp</a>
+          </li>';
+        }
+        ?>
+        
+        
+        <!-- IF USER IS LOGGED IN SHOW LOGOUT BUTTON -->
+        <?php
+        if ($loggedin==true){
+            echo '<li class="nav-item">
+            <a class="nav-link" href="./logout.php">Logout</a>
+          </li>';
+        }
+        ?>
+        
+
+
       </ul>
       <form class="d-flex">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
