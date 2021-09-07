@@ -1,3 +1,34 @@
+<!-- QUERYING DATA FROM DATABASE FOR CHECKING SUCCESSFUL LOGIN -->
+
+<?php
+$loginTrue = false;
+$loginError = false;
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    include "./partials/_dbconnect.php";
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $sql="SELECT * FROM users WHERE username='$username' AND password='$password'";
+    $result=mysqli_query($connection,$sql);
+    $numOfRows=mysqli_num_rows($result);
+
+    if ($numOfRows==1) {
+        $loginTrue=true;
+        // if logged in; starting the session and redirecting the user to the welcome page
+        session_start();
+        $_SESSION['loggedin']=true;
+        $_SESSION['username']=$username;
+        header("location: welcome.php");
+        
+    } else {
+        $loginError = true;
+    }
+}
+
+
+
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -15,7 +46,46 @@
 <body>
     <?php require "./partials/_nav.php" ?>
 
-    
+    <!-- SUCCESS OR ERROR ALERT -->
+
+    <?php
+    if ($loginTrue) {
+        echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+        <strong>You have logged in successfully!</strong>
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>";
+    }
+
+    if ($loginError) {
+        echo "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Invalid Credentials</strong>
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>";
+    }
+    ?>
+
+
+    <div class="container my-5">
+        <h1>Login to our website!</h1>
+    </div>
+    <div class="container my-5">
+
+        <!-- FORM FOR SIGNUP -->
+
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+    </div>
 
     <!-- Optional JavaScript; choose one of the two! -->
 

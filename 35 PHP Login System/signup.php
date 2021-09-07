@@ -1,3 +1,5 @@
+<!-- INSERTING INTO DATABASE -->
+
 <?php
 $showSuccessAlert = false;
 $showErrorAlert = false;
@@ -38,6 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <body>
     <?php require "./partials/_nav.php" ?>
+
+    <!-- SUCCESS OR ERROR ALERT -->
+
     <?php
     if($showSuccessAlert){
         echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
@@ -59,6 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h1>SignUp!</h1>
     </div>
     <div class="container my-5">
+
+        <!-- FORM FOR SIGNUP -->
+
         <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>

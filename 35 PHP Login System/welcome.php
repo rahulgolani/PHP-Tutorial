@@ -1,3 +1,16 @@
+<!-- CHECKING IF THE USER IS LOGGED IN BY CHECKING THE SESSION -->
+
+<?php
+
+session_start();
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin']!=true ){
+    // not logged in; redirect to login page;
+    header("location: login.php");
+    exit; //exit the php script
+}
+
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -14,6 +27,8 @@
 
 <body>
     <?php require "./partials/_nav.php" ?>
+
+    <h1>WELCOME! - <?php echo $_SESSION['username'];?></h1>
 
     <!-- Optional JavaScript; choose one of the two! -->
 
