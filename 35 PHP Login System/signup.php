@@ -19,7 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $duplicateUsername = true;
     } else {
         if ($password == $cpassword) {
-            $sql = "INSERT INTO `users` (`username`, `password`, `created`) VALUES ('$username', '$password', current_timestamp())";
+
+            // STORING THE HASH OF THE PASSWORD
+            $hash=password_hash($password,PASSWORD_DEFAULT);
+
+            $sql = "INSERT INTO `users` (`username`, `password`, `created`) VALUES ('$username', '$hash', current_timestamp())";
             $result = mysqli_query($connection, $sql);
             if ($result) {
                 $showSuccessAlert = true;

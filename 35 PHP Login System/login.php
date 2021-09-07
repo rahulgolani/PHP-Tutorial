@@ -8,18 +8,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $sql="SELECT * FROM users WHERE username='$username' AND password='$password'";
-    $result=mysqli_query($connection,$sql);
-    $numOfRows=mysqli_num_rows($result);
+    $sql = "SELECT * FROM users WHERE username='$username'";
+    $result = mysqli_query($connection, $sql);
+    $numOfRows = mysqli_num_rows($result);
 
-    if ($numOfRows==1) {
-        $loginTrue=true;
-        // if logged in; starting the session and redirecting the user to the welcome page
-        session_start();
-        $_SESSION['loggedin']=true;
-        $_SESSION['username']=$username;
-        header("location: welcome.php");
-        
+    if ($numOfRows == 1) {
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            // verifying the hash of password
+            if (password_verify($password, $row['password'])) {
+                $loginTrue = true;
+                // if logged in; starting the session and redirecting the user to the welcome page
+                session_start();
+                $_SESSION['loggedin'] = true;
+                $_SESSION['username'] = $username;
+                header("location: welcome.php");
+            }
+            else{
+                $loginError=true;
+            }
+        }
     } else {
         $loginError = true;
     }
@@ -82,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="password" name="password" placeholder="Password">
             </div>
-            
+
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
     </div>
