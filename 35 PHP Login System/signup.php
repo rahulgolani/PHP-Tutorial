@@ -3,20 +3,30 @@
 <?php
 $showSuccessAlert = false;
 $showErrorAlert = false;
+$duplicateUsername = false;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include "./partials/_dbconnect.php";
     $username = $_POST['username'];
     $password = $_POST['password'];
     $cpassword = $_POST['cpassword'];
 
-    if ($password == $cpassword) {
-        $sql = "INSERT INTO `users` (`username`, `password`, `created`) VALUES ('$username', '$password', current_timestamp())";
-        $result = mysqli_query($connection, $sql);
-        if ($result) {
-            $showSuccessAlert = true;
-        }
+    // BUG FIX: TO MAKE USERNAME UNINQUE AND IF USERNAME ALREADY EXISTS THEN GIVE ERROR THAT USERNAME ALREADY EXISTS
+
+    $existsSql = "SELECT * FROM users WHERE username='$username'";
+    $result = mysqli_query($connection, $existsSql);
+    $numOfRows = mysqli_num_rows($result);
+    if ($numOfRows > 0) {
+        $duplicateUsername = true;
     } else {
-        $showErrorAlert = true;
+        if ($password == $cpassword) {
+            $sql = "INSERT INTO `users` (`username`, `password`, `created`) VALUES ('$username', '$password', current_timestamp())";
+            $result = mysqli_query($connection, $sql);
+            if ($result) {
+                $showSuccessAlert = true;
+            }
+        } else {
+            $showErrorAlert = true;
+        }
     }
 }
 
@@ -44,21 +54,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- SUCCESS OR ERROR ALERT -->
 
     <?php
-    if($showSuccessAlert){
+    if ($showSuccessAlert) {
         echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
         <strong>Success!</strong> Your account has been created, now you can login!
         <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
     </div>";
     }
 
-    if($showErrorAlert){
+    if ($showErrorAlert) {
         echo "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
         <strong>Error!</strong> Password and Confirm Password are not same. Please Try Again!
         <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
     </div>";
     }
+
+
+    // BUG FIX - ERROR FOR DUPLICATE USERNAME
+    if ($duplicateUsername) {
+        echo "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        <strong>Error!</strong> Username Already Exists.
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>";
+    }
     ?>
-    
+
 
     <div class="container my-5">
         <h1>SignUp!</h1>
@@ -67,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <!-- FORM FOR SIGNUP -->
 
-        <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
                 <input type="text" class="form-control" id="username" name="username" placeholder="Username">
