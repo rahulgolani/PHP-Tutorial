@@ -1,5 +1,4 @@
-
-<?php include "./partials/_dbconnect.php"?>
+<?php include "./partials/_dbconnect.php" ?>
 <!doctype html>
 <html lang="en">
 
@@ -13,17 +12,51 @@
 
   <link rel="stylesheet" href="./css/style.css">
 
-  <title>Hello, world!</title>
+  <title>ServiceNow Forum</title>
 </head>
 
 <body>
   <?php include "./partials/_header.php" ?>
   <!-- ---------------------------------------------------------------------------- -->
 
+  <!-- CAROUSEL -->
+  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="https://source.unsplash.com/1600x400/?coding,microsoft" class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="https://source.unsplash.com/1600x400/?programming,java" class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="https://source.unsplash.com/1600x400/?code,javascript" class="d-block w-100" alt="...">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+  <!-- CAROUSEL END-->
+
+
+  <!-- HEADING -->
   <div class="container">
     <h1 id="heading" class="text-center my-5">ServiceNow Forums - Browse Categories</h1>
   </div>
+  <!-- HEADING END-->
 
+
+  <!-- CATEGORY CARDS   -->
   <div class="container">
     <div class="row">
 
@@ -38,11 +71,10 @@
           </div>
         </div>
       </div>
-      
-
 
     </div>
   </div>
+  <!-- CATEGORY CARDS ENDS-->
 
   <!-- ---------------------------------------------------------------------------------- -->
   <?php include "./partials/_footer.php" ?>
